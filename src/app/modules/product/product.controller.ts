@@ -3,15 +3,15 @@ import { ProductServices } from './product.service';
 
 const createProduct = async (req: Request, res: Response) => {
   try {
-    const { product: productData } = req.body;
-    const result = await ProductServices.createProductIntoDB(productData);
+    const product = req.body;
+    const result = await ProductServices.createProductIntoDB(product);
 
     res.status(200).json({
       success: true,
       message: 'Product created successfully!',
       data: result,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       success: false,
       message: 'something wrong',
@@ -22,14 +22,15 @@ const createProduct = async (req: Request, res: Response) => {
 
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const result = await ProductServices.getAllProductFromDB();
+    const searchTerm = req.query.searchTerm as string;
+    const result = await ProductServices.getAllProductFromDB(searchTerm);
 
     res.status(200).json({
       success: true,
       message: 'Products fetched successfully!',
       data: result,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       success: false,
       message: 'something wrong',
@@ -48,7 +49,7 @@ const getSingleProduct = async (req: Request, res: Response) => {
       message: 'Product fetched successfully!',
       data: result,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       success: false,
       message: 'something wrong',
@@ -72,7 +73,7 @@ const updateSingleProduct = async (req: Request, res: Response) => {
       message: 'Product updated successfully!',
       data: updatedProduct,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       success: false,
       message: 'something wrong',
@@ -91,7 +92,7 @@ const deleteProduct = async (req: Request, res: Response) => {
       success: true,
       message: 'Product deleted successfully!',
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
     res.status(500).json({
       success: false,

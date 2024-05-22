@@ -1,12 +1,17 @@
 import { Product } from './product.interface';
 import { ProductModel } from './product.model';
+import { Types } from 'mongoose';
 
 const createProductIntoDB = async (product: Product) => {
   const result = await ProductModel.create(product);
   return result;
 };
 
-const getAllProductFromDB = async () => {
+const getAllProductFromDB = async (searchTerm?: string) => {
+  if (searchTerm && typeof searchTerm === 'string') {
+    const result = await ProductModel.find({ $text: { $search: searchTerm } });
+    return result;
+  }
   const result = await ProductModel.find();
   return result;
 };
@@ -16,7 +21,6 @@ const getSingleProductFromDB = async (_id: string) => {
   return result;
 };
 
-// updata a product
 const updateProductFromDB = async (id: string, updateInfo: Product) => {
   console.log(id);
   const result = await ProductModel.findByIdAndUpdate(
