@@ -12,19 +12,28 @@ const createProduct = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'something wrong',
+    });
     console.log(error);
   }
 };
 
-const getAllProduct = async (req: Request, res: Response) => {
+const getAllProducts = async (req: Request, res: Response) => {
   try {
     const result = await ProductServices.getAllProductFromDB();
+
     res.status(200).json({
       success: true,
       message: 'Products fetched successfully!',
       data: result,
     });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'something wrong',
+    });
     console.log(error);
   }
 };
@@ -36,16 +45,65 @@ const getSingleProduct = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: 'Products fetched successfully!',
+      message: 'Product fetched successfully!',
       data: result,
     });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'something wrong',
+    });
     console.log(error);
+  }
+};
+
+const updateSingleProduct = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+    const data = req.body;
+
+    const updatedProduct = await ProductServices.updateProductFromDB(
+      productId,
+      data,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Product updated successfully!',
+      data: updatedProduct,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'something wrong',
+    });
+    console.log(error);
+  }
+};
+
+const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+
+    await ProductServices.deleteProductFromDB(productId);
+
+    res.status(200).json({
+      success: true,
+      message: 'Product deleted successfully!',
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'something wrong',
+    });
   }
 };
 
 export const ProductControllers = {
   createProduct,
-  getAllProduct,
+  getAllProducts,
   getSingleProduct,
+  updateSingleProduct,
+  deleteProduct,
 };
