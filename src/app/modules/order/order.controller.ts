@@ -8,7 +8,6 @@ const createOrder = async (req: Request, res: Response) => {
     const data = req.body;
     const order = orderValidationSchema.parse(data);
 
-    // Find the product by its ID
     const product = await ProductModel.findById(order.productId);
 
     if (!product) {
