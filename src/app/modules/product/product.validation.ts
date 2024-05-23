@@ -23,3 +23,5 @@ const productValidationSchema = z.object({
   variants: z.array(variantsValidationSchema).min(1, 'Variants are required'),
   inventory: inventoryValidationSchema,
 });
+
+export default productValidationSchema;
