@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
-import { z } from 'zod';
 import productValidationSchema from './product.validation';
 
 const createProduct = async (req: Request, res: Response) => {
@@ -67,9 +66,11 @@ const updateSingleProduct = async (req: Request, res: Response) => {
     const { productId } = req.params;
     const data = req.body;
 
+    const zodUpdatedData = productValidationSchema.parse(data);
+
     const updatedProduct = await ProductServices.updateProductFromDB(
       productId,
-      data,
+      zodUpdatedData,
     );
 
     res.status(200).json({
